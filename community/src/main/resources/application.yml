@@ -1,16 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://twotwo-db.c7iaym6c0pb0.ap-northeast-2.rds.amazonaws.com:3306/github
+    username: admin
+    password: twotwo22
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: H2
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
