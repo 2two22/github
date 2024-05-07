@@ -1,4 +1,4 @@
-package zerobase.bud.github.dto;
+package twotwo.github.dto;
 
 import java.util.ArrayList;
 import java.util.List;

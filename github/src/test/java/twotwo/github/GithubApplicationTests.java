@@ -1,10 +1,10 @@
-package twotwo.community;
+package twotwo.github;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CommunityApplicationTests {
+class GithubApplicationTests {
 
 	@Test
 	void contextLoads() {

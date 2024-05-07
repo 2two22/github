@@ -1,4 +1,4 @@
-package twotwo.community.client;
+package twotwo.github.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
