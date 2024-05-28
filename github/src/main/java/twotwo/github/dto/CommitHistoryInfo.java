@@ -1,5 +1,6 @@
 package twotwo.github.dto;
 
+/*import zerobase.bud.domain.Level;*/
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -7,13 +8,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import zerobase.bud.domain.Level;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// github history response dto 정의
 public class CommitHistoryInfo {
 
     private String nickName;
@@ -27,9 +28,7 @@ public class CommitHistoryInfo {
     @Builder.Default
     private List<CommitCountByDate> commits = new ArrayList<>();
 
-    public static CommitHistoryInfo of(
-        String nickname, Level level
-    ) {
+    public static CommitHistoryInfo of(String nickname, Level level) {
         return CommitHistoryInfo.builder()
             .nickName(nickname)
             .levelCode(level.getLevelCode())
@@ -61,5 +60,4 @@ public class CommitHistoryInfo {
             .commits(commits)
             .build();
     }
-
 }

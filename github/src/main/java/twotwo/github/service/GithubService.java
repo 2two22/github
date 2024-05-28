@@ -4,28 +4,29 @@ package twotwo.github.service;
 //import static zerobase.bud.common.type.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
 //import static zerobase.bud.common.type.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
-//
-//import twotwo.github.client.UserClient;
-//import java.time.DayOfWeek;
-//import java.time.LocalDate;
-//import java.util.List;
-//import java.util.stream.Collectors;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
 //import zerobase.bud.common.exception.BudException;
-//import zerobase.bud.domain.CommitHistory;
-//import zerobase.bud.domain.GithubInfo;
-//import zerobase.bud.domain.Level;
-//import zerobase.bud.domain.Member;
-//import zerobase.bud.github.dto.CommitCountByDate;
-//import zerobase.bud.github.dto.CommitHistoryInfo;
+import zerobase.bud.domain.CommitHistory;
+import zerobase.bud.domain.GithubInfo;
+import zerobase.bud.domain.Level;
+import zerobase.bud.domain.Member;
+import twotwo.github.dto.CommitCountByDate;
+import twotwo.github.dto.CommitHistoryInfo;
 //import zerobase.bud.repository.CommitHistoryRepository;
 //import zerobase.bud.repository.GithubInfoRepository;
 //import zerobase.bud.repository.LevelRepository;
 //import zerobase.bud.repository.MemberRepository;
-//import zerobase.bud.service.GithubApi;
+import twotwo.github.service.GithubApi;
+import twotwo.github.client.UserClient;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import twotwo.github.dto.response.UserResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,9 +39,23 @@ public class GithubService {
     private final MemberRepository memberRepository;
     private final GithubApi githubApi;
     private static final int WEEKS_FOR_COMMIT_HISTORY = 16;
+    long totalCommitCount;
+    long remainCommitCountNextLevel;
+    long todayCommitCount = 0;
+    long consecutiveCommitDays = 0;
+    long thisWeekCommitCount;
 
-    UserResponse response = userClient.getUserInfo(userId);
-    @Transactional
+    // Feign 클라이언트를 사용하여 사용자 정보를 가져오는 서비스를 작성합니다.
+    @Autowired
+    public GithubService(UserClient userClient) {
+        this.userClient = userClient;
+    }
+    public UserResponse getUserResponse(Long userId) {
+        return userClient.getUserInfo(userId);
+    }
+
+    // UserResponse response = userClient.getUserInfo(userId);
+    /*@Transactional
     public CommitHistoryInfo getCommitInfo(Member member) {
 
         GithubInfo githubInfo = githubInfoRepository.findByUserId(
@@ -59,16 +74,9 @@ public class GithubService {
                     .orElseThrow(() -> new BudException(INVALID_INITIAL_VALUE));
 
             return CommitHistoryInfo.of(member.getNickname(), level);
-        }
+        }*/
 
-        long totalCommitCount;
-        long remainCommitCountNextLevel;
-        long todayCommitCount = 0;
-        long consecutiveCommitDays = 0;
-        long thisWeekCommitCount;
-
-        CommitHistory latestCommitHistory =
-                commitHistories.get(commitHistories.size() - 1);
+        CommitHistory latestCommitHistory = commitHistories.get(commitHistories.size() - 1);
 
         if (LocalDate.now().isEqual(latestCommitHistory.getCommitDate())) {
             todayCommitCount = latestCommitHistory.getCommitCount();
