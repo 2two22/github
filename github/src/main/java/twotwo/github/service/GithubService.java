@@ -1,20 +1,19 @@
 package twotwo.github.service;
 
-//import static zerobase.bud.common.type.ErrorCode.INVALID_INITIAL_VALUE;
-//import static zerobase.bud.common.type.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
-//import static zerobase.bud.common.type.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
+import static zerobase.bud.common.type.ErrorCode.INVALID_INITIAL_VALUE;
+import static zerobase.bud.common.type.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
+import static zerobase.bud.common.type.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
-//import zerobase.bud.common.exception.BudException;
+import zerobase.bud.common.exception.BudException;
 import zerobase.bud.domain.CommitHistory;
 import zerobase.bud.domain.GithubInfo;
 import zerobase.bud.domain.Level;
-import zerobase.bud.domain.Member;
+//import zerobase.bud.domain.Member;
 import twotwo.github.dto.CommitCountByDate;
 import twotwo.github.dto.CommitHistoryInfo;
-//import zerobase.bud.repository.CommitHistoryRepository;
-//import zerobase.bud.repository.GithubInfoRepository;
-//import zerobase.bud.repository.LevelRepository;
-//import zerobase.bud.repository.MemberRepository;
+import zerobase.bud.repository.CommitHistoryRepository;
+import zerobase.bud.repository.GithubInfoRepository;
+import zerobase.bud.repository.LevelRepository;
 import twotwo.github.service.GithubApi;
 import twotwo.github.client.UserClient;
 import java.time.DayOfWeek;
@@ -36,7 +35,7 @@ public class GithubService {
     private final LevelRepository levelRepository;
     private final GithubInfoRepository githubInfoRepository;
     private final CommitHistoryRepository commitHistoryRepository;
-    private final MemberRepository memberRepository;
+    //private final MemberRepository memberRepository;
     private final GithubApi githubApi;
     private static final int WEEKS_FOR_COMMIT_HISTORY = 16;
     long totalCommitCount;
@@ -53,28 +52,6 @@ public class GithubService {
     public UserResponse getUserResponse(Long userId) {
         return userClient.getUserInfo(userId);
     }
-
-    // UserResponse response = userClient.getUserInfo(userId);
-    /*@Transactional
-    public CommitHistoryInfo getCommitInfo(Member member) {
-
-        GithubInfo githubInfo = githubInfoRepository.findByUserId(
-                        member.getUserId())
-                .orElseThrow(() -> new BudException(NOT_REGISTERED_GITHUB_USER_ID));
-
-        List<CommitHistory> commitHistories = commitHistoryRepository
-                .findAllByGithubInfoIdAndCommitDateBetween(
-                        githubInfo.getId()
-                        , LocalDate.now().minusWeeks(WEEKS_FOR_COMMIT_HISTORY)
-                        , LocalDate.now()
-                );
-
-        if (commitHistories.isEmpty()) {
-            Level level = levelRepository.findByLevelStartCommitCount(0)
-                    .orElseThrow(() -> new BudException(INVALID_INITIAL_VALUE));
-
-            return CommitHistoryInfo.of(member.getNickname(), level);
-        }*/
 
         CommitHistory latestCommitHistory = commitHistories.get(commitHistories.size() - 1);
 
@@ -94,7 +71,7 @@ public class GithubService {
                 .map(CommitCountByDate::from)
                 .collect(Collectors.toList());
 
-        totalCommitCount = commits.stream()
+        /*totalCommitCount = commits.stream()
                 .filter(x -> !x.getCommitDate().isBefore(member.getCreatedAt().toLocalDate()))
                 .map(CommitCountByDate::getCommitCount)
                 .reduce(0L, Long::sum);
@@ -140,7 +117,7 @@ public class GithubService {
         return githubApi.saveCommitInfoFromLastCommitDate(
                 githubInfo, getLastCommitDate(githubInfo)
         );
-    }
+    }*/
 
     private LocalDate getLastCommitDate(GithubInfo githubInfo) {
         return commitHistoryRepository.findFirstByGithubInfoIdOrderByCommitDateDesc(

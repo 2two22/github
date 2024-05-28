@@ -25,7 +25,7 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import zerobase.bud.domain.CommitHistory;
+import twotwo.github.CommitHistory;
 import zerobase.bud.domain.GithubInfo;
 import zerobase.bud.exception.BudException;
 import zerobase.bud.repository.CommitHistoryRepository;

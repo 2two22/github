@@ -1,8 +1,5 @@
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -15,7 +12,7 @@ public class TokenController {
     }
 
     @PostMapping("/saveToken")
-    public ResponseEntity<String> saveToken(@RequestBody String token) {
+    public ResponseEntity<String> saveToken(@RequestHeader("Authorization") String token) {
         Long userId = tokenService.getId(token);
         // userId를 데이터베이스에 저장하거나 필요에 따라 처리합니다.
         // 예: userRepository.save(new User(userId, token));
