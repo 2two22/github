@@ -1,4 +1,4 @@
-package twotwo.community.util;
+package twotwo.github.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

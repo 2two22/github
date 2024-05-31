@@ -1,17 +1,19 @@
-// 사용자의 아이디, 닉네임, 프로필 경로를 포함하는 간단한 DTO(Data Transfer Object)를 정의합니다.
-package twotwo.community.dto.response;
+package twotwo.github.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Builder;
+import zerobase.bud.domain.User;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserResponse {
-    private Long id;
-    private String nickname;
-    private String profilePath;
+@Builder
+public record UserResponse(
+        Long id,
+        String nickname,
+        //String profilePath
+        ) {
+public static UserResponse from(User user) {
+        return UserResponse.builder()
+        .id(user.getId())
+        .nickname(user.getNickname())
+        //.profilePath(user.getProfilePath())
+        .build();
+        }
 }

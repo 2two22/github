@@ -1,7 +1,7 @@
 package twotwo.github.service;
 
-import static zerobase.bud.type.ErrorCode.FAILED_CONNECT_GITHUB;
-import static zerobase.bud.type.ErrorCode.FAILED_GET_COMMIT_INFO;
+import static twotwo.github.exception.ErrorCode.FAILED_CONNECT_GITHUB;
+import static twotwo.github.exception.ErrorCode.FAILED_GET_COMMIT_INFO;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -25,10 +25,10 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import twotwo.github.CommitHistory;
-import zerobase.bud.domain.GithubInfo;
-import zerobase.bud.exception.BudException;
-import zerobase.bud.repository.CommitHistoryRepository;
+import twotwo.github.domain.CommitHistory;
+import twotwo.github.domain.GithubInfo;
+import twotwo.github.exception.BudException;
+import twotwo.github.domain.repository.CommitHistoryRepository;
 
 /* 검색 조건을 설정하면 커밋 기록 검색을 Builder가 대신 도와준다. github ID로 커밋을 검색하고, 최신순으로 정렬해 받아오도록 했다.
 @Service
