@@ -1,8 +1,5 @@
 package twotwo.github.service;
 
-import static twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
-import static twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
-import static twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
 import twotwo.github.domain.UserLevel;
 import twotwo.github.domain.repository.UserLevelRepository;
@@ -31,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import twotwo.github.dto.response.UserResponse;
 import twotwo.github.util.TokenProvider;
+
+        import static twotwo.github.exception.ErrorCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -139,18 +138,19 @@ public class GithubService {
 
     //이부분 수정 방법 생각하기
     private Level getLevel(Long userId, long totalCommitCount) {
-
-        Level level = userLevelRepository.findByUserId(userId).get().getLevel();
-
-        if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
-            level = levelRepository.
-                    findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
-                            totalCommitCount, totalCommitCount)
-                    .orElseThrow(
-                            () -> new BudException(INVALID_TOTAL_COMMIT_COUNT));
+        if (userLevelRepository.findByUserId(userId).isPresent()) {
+            Level level = userLevelRepository.findByUserId(userId).get().getLevel();
+            if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
+                level = levelRepository.
+                        findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
+                                totalCommitCount, totalCommitCount)
+                        .orElseThrow(
+                                () -> new BudException(INVALID_TOTAL_COMMIT_COUNT));
+            }
+            return level;
+        } else {
+            throw new BudException(NOT_REGISTERED_USER_LEVEL);
         }
-
-        return level;
     }
 
     public String saveCommitInfoFromLastCommitDate(String token) {
