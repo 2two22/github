@@ -39,7 +39,7 @@ public class GithubService {
 
     private final CommitHistoryRepository commitHistoryRepository;
 
-    private final MemberRepository memberRepository;   //
+    //private final MemberRepository memberRepository;   //
 
     private final GithubApi githubApi;
 
@@ -97,12 +97,12 @@ public class GithubService {
                 .map(CommitCountByDate::from)
                 .collect(Collectors.toList());
 
-        totalCommitCount = commits.stream()
-                .filter(x -> !x.getCommitDate().isBefore(member.getCreatedAt().toLocalDate()))
+        totalCommitCount = commits.stream()                //
+                .filter(x -> !x.getCommitDate().isBefore(githubInfo.getCreatedAt().toLocalDate()))
                 .map(CommitCountByDate::getCommitCount)
                 .reduce(0L, Long::sum);
 
-//        Level level = getLevel(member, totalCommitCount);
+//        Level level = getLevel(response, totalCommitCount);
 //
 //        member.updateLevel(level);
 //        memberRepository.save(member);
@@ -122,8 +122,8 @@ public class GithubService {
     }
 
     //이부분 수정 방법 생각하기
-    private Level getLevel(Member member, long totalCommitCount) {
-        Level level = member.getLevel();
+    private Level getLevel( response, long totalCommitCount) {
+        Level level = response.getLevel();
         if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
             level = levelRepository.
                     findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
