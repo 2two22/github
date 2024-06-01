@@ -1,3 +1,5 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+github/src/main/resources/application.yml

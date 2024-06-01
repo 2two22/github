@@ -1,7 +1,9 @@
 package twotwo.github.controller;
 
 //import zerobase.bud.domain.Member;
+import twotwo.github.domain.GithubInfo;
 import twotwo.github.dto.CommitHistoryInfo;
+import twotwo.github.dto.request.GithubInfoRequest;
 import twotwo.github.service.GithubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,11 @@ public class GithubController {
     @GetMapping
     public CommitHistoryInfo getCommitInfo(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
         return githubService.getCommitInfo(token);
+    }
+
+    @PostMapping("/githubInfo")
+    public GithubInfo saveGithubInfo(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token, @RequestBody GithubInfoRequest request) {
+        return githubService.saveGithubInfo(token, request);
     }
 }
 

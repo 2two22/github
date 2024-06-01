@@ -16,7 +16,6 @@ import lombok.Setter;
 @Builder
 // github history response dto 정의
 public class CommitHistoryInfo {
-
     private String nickName;
     private String levelCode;
     private String imagePath;

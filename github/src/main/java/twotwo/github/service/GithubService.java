@@ -6,6 +6,7 @@ import static twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
 import twotwo.github.domain.UserLevel;
 import twotwo.github.domain.repository.UserLevelRepository;
+import twotwo.github.dto.request.GithubInfoRequest;
 import twotwo.github.exception.BudException;
 import twotwo.github.domain.CommitHistory;
 import twotwo.github.domain.GithubInfo;
@@ -169,6 +170,21 @@ public class GithubService {
                 .map(CommitHistory::getCommitDate)
                 .findFirst()
                 .orElse(LocalDate.now().minusWeeks(WEEKS_FOR_COMMIT_HISTORY));
+    }
+
+    public GithubInfo saveGithubInfo(String token, GithubInfoRequest request) {
+        Long userId = tokenProvider.getId(token);
+        GithubInfo githubInfo = githubInfoRepository.findByMemberId(userId)
+                .orElse(GithubInfo.builder()
+                        .memberId(userId)
+                        .build()
+                );
+        githubInfo = GithubInfo.builder()
+                .memberId(userId)
+                .accessToken(request.getAccessToken())
+                .username(request.getUsername())
+                .build();
+        return githubInfoRepository.save(githubInfo);
     }
 
 }

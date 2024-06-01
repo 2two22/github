@@ -7,17 +7,13 @@ import java.time.LocalDate;
 //import javax.persistence.Id;
 //import javax.persistence.ManyToOne;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
 import twotwo.github.domain.BaseEntity;
 
 @Getter
@@ -34,7 +30,7 @@ public class CommitHistory extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    private twotwo.github.domain.GithubInfo githubInfo;
+    private GithubInfo githubInfo;
 
     private long commitCount;
 
