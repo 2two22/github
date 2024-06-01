@@ -1,8 +1,8 @@
-package main.java.twotwo.github.service;
+package twotwo.github.service;
 
-import static main.java.twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
-import static main.java.twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
-import static main.java.twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
+import static twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
+import static twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
+import static twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
 import twotwo.github.exception.BudException;
 import twotwo.github.domain.CommitHistory;
@@ -54,8 +54,7 @@ public class GithubService {
         Long userId = tokenProvider.getId(token);
         UserResponse response = userClient.getUserInfo(token);
 
-        GithubInfo githubInfo = githubInfoRepository.findByUserId(
-                userId)
+        GithubInfo githubInfo = githubInfoRepository.findByUserId(userId)
                 .orElseThrow(() -> new BudException(NOT_REGISTERED_GITHUB_USER_ID));
 
         List<CommitHistory> commitHistories = commitHistoryRepository
@@ -122,7 +121,7 @@ public class GithubService {
     }
 
     //이부분 수정 방법 생각하기
-    private Level getLevel( response, long totalCommitCount) {
+    private Level getLevel(UserResponse response, long totalCommitCount) {
         Level level = response.getLevel();
         if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
             level = levelRepository.
@@ -137,8 +136,7 @@ public class GithubService {
 
     public String saveCommitInfoFromLastCommitDate(String token) {
         Long userId = tokenProvider.getId(token);
-        GithubInfo githubInfo = githubInfoRepository.findByUserId(
-                userId)
+        GithubInfo githubInfo = githubInfoRepository.findByUserId(userId)
                 .orElseThrow(() -> new BudException(NOT_REGISTERED_GITHUB_USER_ID));
 
         return githubApi.saveCommitInfoFromLastCommitDate(

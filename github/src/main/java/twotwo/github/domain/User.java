@@ -17,7 +17,7 @@ public class User {
     public static User from(UserResponse response){
         return User.builder()
                 .id(response.id())
-                .nickname(response.nickname())
+                .nickname(response.nickName())
                 .build();
     }
 }
