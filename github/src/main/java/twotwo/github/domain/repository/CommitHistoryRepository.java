@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import twotwo.github.CommitHistory;
+import twotwo.github.domain.CommitHistory;
 
 @Repository
 public interface CommitHistoryRepository extends

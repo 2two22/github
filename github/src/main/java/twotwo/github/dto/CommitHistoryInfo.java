@@ -1,6 +1,6 @@
 package twotwo.github.dto;
 
-/*import zerobase.bud.domain.Level;*/
+import twotwo.github.domain.Level;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;

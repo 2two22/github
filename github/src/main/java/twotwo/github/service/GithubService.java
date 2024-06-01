@@ -1,8 +1,8 @@
-package twotwo.github.service;
+package main.java.twotwo.github.service;
 
-import static twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
-import static twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
-import static twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
+import static main.java.twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
+import static main.java.twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
+import static main.java.twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
 import twotwo.github.exception.BudException;
 import twotwo.github.domain.CommitHistory;

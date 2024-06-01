@@ -13,13 +13,11 @@ import twotwo.github.dto.response.UserResponse;
 public class User {
     private Long id;
     private String nickname;
-    //private String profilePath;
 
     public static User from(UserResponse response){
         return User.builder()
                 .id(response.id())
-                .nickname(response.nickName())
-                //.profilePath(response.profileUrl())
+                .nickname(response.nickname())
                 .build();
     }
 }

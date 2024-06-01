@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import twotwo.github.domain.BaseEntity;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class CommitHistory extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    private GithubInfo githubInfo;
+    private twotwo.github.domain.GithubInfo githubInfo;
 
     private long commitCount;
 

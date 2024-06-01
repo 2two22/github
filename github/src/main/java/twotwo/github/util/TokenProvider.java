@@ -37,8 +37,9 @@ public class TokenProvider {
         return !claims.getExpiration().before(new Date());
     }
 
-    private Claims parseClaims(String token) {
+    private Claims parseClaims(String received) {
         try {
+            String token = received.replaceAll("Bearer ", "");
             return Jwts.parser().setSigningKey(this.secretKey)
                     .build()
                     .parseClaimsJws(token).getBody();
