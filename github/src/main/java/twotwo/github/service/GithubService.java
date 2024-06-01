@@ -121,8 +121,7 @@ public class GithubService {
     }
 
     //이부분 수정 방법 생각하기
-    private Level getLevel(UserResponse response, long totalCommitCount) {
-        Level level = response.getLevel();
+    private Level getLevel(long totalCommitCount) {
         if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
             level = levelRepository.
                     findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
