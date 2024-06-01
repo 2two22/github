@@ -29,8 +29,7 @@ public class Level extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private long levelNumber;
+    private Long levelNumber;
 
     @Column(unique = true)
     private String levelCode;

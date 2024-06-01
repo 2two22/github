@@ -17,12 +17,12 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-//import org.kohsuke.github.GHCommit;
-//import org.kohsuke.github.GHCommitQueryBuilder;
-//import org.kohsuke.github.GHRepository;
-//import org.kohsuke.github.GHUser;
-//import org.kohsuke.github.GitHub;
-//import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHCommitQueryBuilder;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHUser;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import twotwo.github.domain.CommitHistory;
@@ -30,19 +30,6 @@ import twotwo.github.domain.GithubInfo;
 import twotwo.github.exception.BudException;
 import twotwo.github.domain.repository.CommitHistoryRepository;
 
-/* 검색 조건을 설정하면 커밋 기록 검색을 Builder가 대신 도와준다. github ID로 커밋을 검색하고, 최신순으로 정렬해 받아오도록 했다.
-@Service
-public class GithubApi {
-    public PagedIterator<GHCommit> getCommits(String userId) {
-        HCommitSearchBuilder builder = github.searchCommits()
-                .author(userId)
-                .sort(GHCommitSearchBuilder.Sort.AUTHOR_DATE);
-
-        // 너무 많은 커밋 기록을 읽어올 땐 성능이 떨어져서 페이징 크기를 따로 설정해 주었다.
-        PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(7);
-        return commits._iterator(1);
-    }
-}*/
 @Slf4j
 @RequiredArgsConstructor
 @Service

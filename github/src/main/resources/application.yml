@@ -19,5 +19,8 @@ spring:
         config:
           userClient:
             url: localhost:8080
+  github:
+    client-id: Iv23liMpcNUCy91vFtcp
+    client-secret: cf3b877f4be960f5f6caa932e65dbb126920f720
   jwt:
       secret: ZGF5b25lLXNwcmluZy1ib290LWRpdmlkZW5kLXByb2plY3QtdHV0b3JpYWwtand0LXNlY3JldC1rZXkKZGF5b25lLXNwcmluZy1ib290LWRpdmlkZW5kLXByb2plY3QtdHV0b3JpYWwtand0LXNlY3JldC1rZXkK

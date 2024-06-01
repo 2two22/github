@@ -4,6 +4,8 @@ import static twotwo.github.exception.ErrorCode.INVALID_INITIAL_VALUE;
 import static twotwo.github.exception.ErrorCode.INVALID_TOTAL_COMMIT_COUNT;
 import static twotwo.github.exception.ErrorCode.NOT_REGISTERED_GITHUB_USER_ID;
 //import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
+import twotwo.github.domain.UserLevel;
+import twotwo.github.domain.repository.UserLevelRepository;
 import twotwo.github.exception.BudException;
 import twotwo.github.domain.CommitHistory;
 import twotwo.github.domain.GithubInfo;
@@ -14,6 +16,7 @@ import twotwo.github.dto.CommitHistoryInfo;
 import twotwo.github.domain.repository.CommitHistoryRepository;
 import twotwo.github.domain.repository.GithubInfoRepository;
 import twotwo.github.domain.repository.LevelRepository;
+import twotwo.github.exception.ErrorCode;
 import twotwo.github.service.GithubApi;
 import twotwo.github.client.UserClient;
 import java.time.DayOfWeek;
@@ -32,12 +35,13 @@ import twotwo.github.util.TokenProvider;
 @RequiredArgsConstructor
 @Service
 public class GithubService {
-
+    public static final String MAXIMUM_LEVEL_CODE = "찬란한_나무";
     private final LevelRepository levelRepository;
 
     private final GithubInfoRepository githubInfoRepository;
 
     private final CommitHistoryRepository commitHistoryRepository;
+    private final UserLevelRepository userLevelRepository;
 
     //private final MemberRepository memberRepository;   //
 
@@ -54,7 +58,7 @@ public class GithubService {
         Long userId = tokenProvider.getId(token);
         UserResponse response = userClient.getUserInfo(token);
 
-        GithubInfo githubInfo = githubInfoRepository.findByUserId(userId)
+        GithubInfo githubInfo = githubInfoRepository.findByMemberId(userId)
                 .orElseThrow(() -> new BudException(NOT_REGISTERED_GITHUB_USER_ID));
 
         List<CommitHistory> commitHistories = commitHistoryRepository
@@ -68,7 +72,7 @@ public class GithubService {
             Level level = levelRepository.findByLevelStartCommitCount(0)
                     .orElseThrow(() -> new BudException(INVALID_INITIAL_VALUE));
 
-            return CommitHistoryInfo.of(response.getNickname(), level);
+            return CommitHistoryInfo.of(response.getNickName(), level);
         }
 
         long totalCommitCount;
@@ -101,15 +105,16 @@ public class GithubService {
                 .map(CommitCountByDate::getCommitCount)
                 .reduce(0L, Long::sum);
 
-//        Level level = getLevel(response, totalCommitCount);
-//
+        Level level = getLevel(userId, totalCommitCount);
+
 //        member.updateLevel(level);
 //        memberRepository.save(member);
+        saveLevel(userId, level);
 
         remainCommitCountNextLevel =
                 level.getNextLevelStartCommitCount() - totalCommitCount;
 
-        return CommitHistoryInfo.of(response.getNickname()
+        return CommitHistoryInfo.of(response.getNickName()
                 , level.getLevelCode()
                 , level.getImagePath()
                 , remainCommitCountNextLevel
@@ -120,8 +125,22 @@ public class GithubService {
                 , commits);
     }
 
+    public UserLevel saveLevel (Long userId, Level level) {
+        UserLevel userLevel = userLevelRepository.findByUserId(userId)
+                .orElse(UserLevel.builder()
+                        .userId(userId)
+                        .level(level)
+                        .build());
+        userLevel.updateLevel(level);
+        userLevelRepository.save(userLevel);
+        return userLevel;
+    }
+
     //이부분 수정 방법 생각하기
-    private Level getLevel(long totalCommitCount) {
+    private Level getLevel(Long userId, long totalCommitCount) {
+
+        Level level = userLevelRepository.findByUserId(userId).get().getLevel();
+
         if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
             level = levelRepository.
                     findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
@@ -135,7 +154,7 @@ public class GithubService {
 
     public String saveCommitInfoFromLastCommitDate(String token) {
         Long userId = tokenProvider.getId(token);
-        GithubInfo githubInfo = githubInfoRepository.findByUserId(userId)
+        GithubInfo githubInfo = githubInfoRepository.findByMemberId(userId)
                 .orElseThrow(() -> new BudException(NOT_REGISTERED_GITHUB_USER_ID));
 
         return githubApi.saveCommitInfoFromLastCommitDate(

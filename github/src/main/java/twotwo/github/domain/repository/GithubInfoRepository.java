@@ -11,7 +11,7 @@ import twotwo.github.domain.GithubInfo;
 @Repository
 public interface GithubInfoRepository extends JpaRepository<GithubInfo, Long> {
 
-    Optional<GithubInfo> findByUserId(String userId);
+    Optional<GithubInfo> findByMemberId(Long memberId);
 
     @Modifying
     @Query(value = "delete from github_info where member_id=:memberId", nativeQuery = true)

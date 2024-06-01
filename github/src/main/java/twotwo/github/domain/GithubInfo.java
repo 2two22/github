@@ -32,7 +32,7 @@ public class GithubInfo extends BaseEntity {
     //private Member member;
 
     @Column(unique = true)
-    private String userId;
+    private Long memberId;
 
     private String username;
 
