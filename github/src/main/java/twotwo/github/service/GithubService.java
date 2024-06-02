@@ -142,7 +142,7 @@ public class GithubService {
         Optional<UserLevel> optionalUserLevel = userLevelRepository.findByUserId(userId);
         if (optionalUserLevel.isPresent()) {
             Level level = optionalUserLevel.get().getLevel();
-            if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
+            if (MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
                 return level;
             }
         }
