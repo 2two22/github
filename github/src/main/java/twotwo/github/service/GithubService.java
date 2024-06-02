@@ -20,6 +20,7 @@ import twotwo.github.client.UserClient;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -138,19 +139,18 @@ public class GithubService {
 
     //이부분 수정 방법 생각하기
     private Level getLevel(Long userId, long totalCommitCount) {
-        if (userLevelRepository.findByUserId(userId).isPresent()) {
-            Level level = userLevelRepository.findByUserId(userId).get().getLevel();
+        Optional<UserLevel> optionalUserLevel = userLevelRepository.findByUserId(userId);
+        if (optionalUserLevel.isPresent()) {
+            Level level = optionalUserLevel.get().getLevel();
             if (!MAXIMUM_LEVEL_CODE.equals(level.getLevelCode())) {
-                level = levelRepository.
-                        findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
-                                totalCommitCount, totalCommitCount)
-                        .orElseThrow(
-                                () -> new BudException(INVALID_TOTAL_COMMIT_COUNT));
+                return level;
             }
-            return level;
-        } else {
-            throw new BudException(NOT_REGISTERED_USER_LEVEL);
         }
+        return levelRepository.
+                findByLevelStartCommitCountLessThanEqualAndNextLevelStartCommitCountGreaterThan(
+                        totalCommitCount, totalCommitCount)
+                .orElseThrow(
+                        () -> new BudException(INVALID_TOTAL_COMMIT_COUNT));
     }
 
     public String saveCommitInfoFromLastCommitDate(String token) {
@@ -174,12 +174,13 @@ public class GithubService {
 
     public GithubInfo saveGithubInfo(String token, GithubInfoRequest request) {
         Long userId = tokenProvider.getId(token);
-        GithubInfo githubInfo = githubInfoRepository.findByMemberId(userId)
-                .orElse(GithubInfo.builder()
-                        .memberId(userId)
-                        .build()
-                );
-        githubInfo = GithubInfo.builder()
+        Optional<GithubInfo> optionalGithubInfo = githubInfoRepository.findByMemberId(userId);
+        GithubInfo githubInfo;
+        if(optionalGithubInfo.isPresent()) {
+            githubInfo = optionalGithubInfo.get();
+            githubInfo.update(request.getUsername(), request.getAccessToken());
+        }
+        else githubInfo = GithubInfo.builder()
                 .memberId(userId)
                 .accessToken(request.getAccessToken())
                 .username(request.getUsername())

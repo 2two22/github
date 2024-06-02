@@ -33,4 +33,9 @@ public class GithubInfo extends BaseEntity {
     private String username;
 
     private String accessToken;
+
+    public void update(String username, String accessToken){
+        this.username = username;
+        this.accessToken = accessToken;
+    }
 }
