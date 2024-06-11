@@ -1,6 +1,5 @@
 package twotwo.github.service;
 
-//import static zerobase.bud.member.util.MemberConstants.MAXIMUM_LEVEL_CODE;
 import twotwo.github.domain.UserLevel;
 import twotwo.github.domain.repository.UserLevelRepository;
 import twotwo.github.dto.request.GithubInfoRequest;
@@ -8,14 +7,11 @@ import twotwo.github.exception.BudException;
 import twotwo.github.domain.CommitHistory;
 import twotwo.github.domain.GithubInfo;
 import twotwo.github.domain.Level;
-//import zerobase.bud.domain.Member;
 import twotwo.github.dto.CommitCountByDate;
 import twotwo.github.dto.CommitHistoryInfo;
 import twotwo.github.domain.repository.CommitHistoryRepository;
 import twotwo.github.domain.repository.GithubInfoRepository;
 import twotwo.github.domain.repository.LevelRepository;
-import twotwo.github.exception.ErrorCode;
-import twotwo.github.service.GithubApi;
 import twotwo.github.client.UserClient;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -26,11 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import twotwo.github.dto.response.UserResponse;
 import twotwo.github.util.TokenProvider;
-
-        import static twotwo.github.exception.ErrorCode.*;
+import static twotwo.github.exception.ErrorCode.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,18 +32,11 @@ import twotwo.github.util.TokenProvider;
 public class GithubService {
     public static final String MAXIMUM_LEVEL_CODE = "찬란한_나무";
     private final LevelRepository levelRepository;
-
     private final GithubInfoRepository githubInfoRepository;
-
     private final CommitHistoryRepository commitHistoryRepository;
     private final UserLevelRepository userLevelRepository;
-
-    //private final MemberRepository memberRepository;   //
-
     private final GithubApi githubApi;
-
     private static final int WEEKS_FOR_COMMIT_HISTORY = 16;
-
     private final UserClient userClient;
     private final TokenProvider tokenProvider;
 
@@ -101,13 +88,13 @@ public class GithubService {
                 .map(CommitCountByDate::from)
                 .collect(Collectors.toList());
 
-        totalCommitCount = commits.stream()                //
+        totalCommitCount = commits.stream()
                 .filter(x -> !x.getCommitDate().isBefore(githubInfo.getCreatedAt().toLocalDate()))
                 .map(CommitCountByDate::getCommitCount)
                 .reduce(0L, Long::sum);
 
         Level level = getLevel(userId, totalCommitCount);
-
+//        기존 코드 member 의존성 제거하기 위함
 //        member.updateLevel(level);
 //        memberRepository.save(member);
         saveLevel(userId, level);
@@ -137,7 +124,6 @@ public class GithubService {
         return userLevel;
     }
 
-    //이부분 수정 방법 생각하기
     private Level getLevel(Long userId, long totalCommitCount) {
         Optional<UserLevel> optionalUserLevel = userLevelRepository.findByUserId(userId);
         if (optionalUserLevel.isPresent()) {
@@ -171,7 +157,7 @@ public class GithubService {
                 .findFirst()
                 .orElse(LocalDate.now().minusWeeks(WEEKS_FOR_COMMIT_HISTORY));
     }
-
+//  깃헙 정보 저장
     public GithubInfo saveGithubInfo(String token, GithubInfoRequest request) {
         Long userId = tokenProvider.getId(token);
         Optional<GithubInfo> optionalGithubInfo = githubInfoRepository.findByMemberId(userId);
