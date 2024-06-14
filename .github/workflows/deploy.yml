@@ -46,5 +46,5 @@ jobs:
           key: ${{ secrets.SSH_DEPLOYER }}
           port: 22
           script: |
-            kubectl set image deployment/github-deployment github=${{ secretERHUB_ID }}/github:latest
+            kubectl set image deployment/github-deployment github=${{ secrets.DOCKERHUB_ID }}/github:latest
             kubectl rollout restart deployment/github-deployment
