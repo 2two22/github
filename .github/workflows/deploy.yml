@@ -37,3 +37,14 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_ID }}/github:latest
           build-args: |
             DB_URL=${{ secrets.DB_ENDPOINT }}
+          
+      - name: deploy image
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST_DEPLOYER }}
+          username: ${{ secrets.HOST_DEPLOYER_USERNAME }}
+          key: ${{ secrets.SSH_DEPLOYER }}
+          port: 22
+          script: |
+            kubectl set image deployment/github-deployment github=${{ secretERHUB_ID }}/github:latest
+            kubectl rollout restart deployment/github-deployment
